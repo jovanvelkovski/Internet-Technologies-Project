@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <!-- Fonts -->
+    <link href="fontawesome/css/all.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
+
+    <!-- C3 css -->
+    <link href="vendor/c3/c3.min.css" rel="stylesheet">
+
+    <title>Кетеринг</title>
+    <style>
+        li {
+            margin-right: 1em;
+        }
+    </style>
+
+</head>
+
+<body class="bg-dark">
+
+    <!-- Navigation -->
+    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-warning">
+        <div class="container">
+
+            <a class="navbar-brand" href="Index">
+                <i class="fa fa-hamburger"></i> &nbsp;РОКО
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        @Html.ActionLink("Почетна", "Index", "Home")
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Мени", "Menu", "Home")
+                    </li>
+
+                    <li class="nav-item">
+                        @Html.ActionLink("За нас", "About", "Home")
+                    </li>
+
+                    <li class="nav-item">
+                        @Html.ActionLink("Контакт", "Contact", "Home")
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Кетеринг", "Catering", "Home")
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Кошничка", "Cart", "Home")
+                    </li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item">
+                            @Html.ActionLink("Измени мени", "Index", "Admin")
+                        </li>
+                    }
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li>
+                            Здраво, @User.Identity.Name.Substring(0, User.Identity.Name.IndexOf("@"))!
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            @Html.ActionLink("Најави се / Зачлени се", "LogIn", "Account")
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="container p-0 bg-dark text-warning">
+        <div class="col-12">
+            <div class="row">
+                <!-- Contact Form -->
+                <div class="col-sm p-5">
+                    <h2 class="font-weight-bold">Заинтересирани за кетеринг?<br />
+                    Пратете ни е-маил, а ние ќе се погрижиме за останатото!</h2>
+                    <br>
+           
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 p-0">
+                            <div class="form-group">
+                                <label for="nameSurnameInput">Име и презиме</label>
+                                <div class="form-row" id="nameSurnameInput">
+                                    <div class="col">
+                                        <input type="text" class="form-control" placeholder="Име">
+                                    </div>
+                                    <div class="col">
+                                        <input type="text" class="form-control" placeholder="Презиме">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="telephoneNrInput">Телефонски број</label>
+                                <input class="form-control" type="tel" placeholder="070 123 456" id="telephoneNrInput">
+                            </div>
+                            <div class="form-group">
+                                <label for="emailAddress">емаил адреса</label>
+                                <input type="email" class="form-control" id="emailAddress" placeholder="name@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="typeSelect">Каков настан организирате?</label>
+                                <select class="form-control" id="typeSelect">
+                                    <option>Роденден</option>
+                                    <option>Конференција</option>
+                                    <option>Веридба</option>
+                                    <option>Друго</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-10 p-0">
+                            <div class="form-group">
+                                <label for="detailsTextArea">Детали за настанот</label>
+                                <textarea class="form-control" id="detailsTextArea" rows="3" placeholder="Внеси време, датум и локација на настанот, број на присутни и други било какви информации кои што би биле од корист!"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-10 p-0">
+                            @using (Html.BeginForm("CateringSuccess", "Home"))
+                            {
+                                <button class="btn btn-outline-warning">Прати нарачка</button>
+                            }
+                           
+                        </div>
+                   
+                </div>
+                <!-- /Contact Form -->
+            </div>
+            <div class="row bg-warning" style="height: 0.5rem"></div>
+        </div>
+
+        <!-- Footer -->
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12 p-3 bg-dark text-warning text-center">
+                    <small>Copyright FINKI 2019</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    <!-- C3/D3 Charts -->
+    <script src="vendor/c3/d3.min.js"></script>
+    <script src="vendor/c3/c3.min.js"></script>
+
+    <script src="js/admin.js"></script>
+
+</body>
+</html>

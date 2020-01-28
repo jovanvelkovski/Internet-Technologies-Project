@@ -1,0 +1,251 @@
+﻿@using it_project.Models
+@model IEnumerable<Burger>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <!-- Fonts -->
+    <link href="fontawesome/css/all.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
+
+    <!-- C3 css -->
+    <link href="vendor/c3/c3.min.css" rel="stylesheet">
+
+    <title>Кошничка</title>
+    <style>
+        li {
+            margin-right: 1em;
+        }
+    </style>
+
+</head>
+
+<body class="bg-dark">
+
+    <!-- Navigation -->
+    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-warning">
+        <div class="container">
+
+            <a class="navbar-brand" href="Index">
+                <i class="fa fa-hamburger"></i> &nbsp;РОКО
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        @Html.ActionLink("Почетна", "Index", "Home")
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Мени", "Menu", "Home")
+                    </li>
+
+                    <li class="nav-item">
+                        @Html.ActionLink("За нас", "About", "Home")
+                    </li>
+
+                    <li class="nav-item">
+                        @Html.ActionLink("Контакт", "Contact", "Home")
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Кетеринг", "Catering", "Home")
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Кошничка", "Cart", "Home")
+                    </li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item">
+                            @Html.ActionLink("Измени мени", "Index", "Admin")
+                        </li>
+                    }
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li>
+                            Здраво, @User.Identity.Name.Substring(0, User.Identity.Name.IndexOf("@"))!
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            @Html.ActionLink("Најави се / Зачлени се", "LogIn", "Account")
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="container mb-4 bg-dark text-warning">
+        <br>
+        <div class="row">
+            <div class="table-responsive bg-dark">
+
+                @{ var vkupno = 0;}
+                @if (Session["cart"] != null && ((List<Koshnichka>)Session["cart"]).Count != 0)
+                {
+                    <div class="col-12">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col"> </th>
+                                    <th scope="col">Име</th>
+                                    <th scope="col" class="text-center">Количина</th>
+                                    <th scope="col" class="text-right">Единечна цена</th>
+                                    <th> </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var k in (List<Koshnichka>)Session["cart"])
+                                {
+
+                                    <tr>
+                                        <td><img src="@Href(k.burger.Pateka)" height="50" width="50" /> </td>
+                                        <td>@k.burger.Ime</td>
+                                        <td width="10">
+                                            @using (Html.BeginForm("AddToCart", "Home", new { productID = k.burger.Id }, FormMethod.Post))
+                                            {
+                                                @* <input class="form-control" type="text" value=@k.Kolicina style="width: 5rem"/>*@
+                                                <input class="form-control" type="text" value="@k.Kolicina" id="asd" style="width: 5rem" />
+                                            }
+                                        </td>
+                                        <td class="text-right">@k.burger.Cena МКД</td>
+                                        <td class="text-right">
+                                            <!--kopcheto za brishenje na produkt od koshnichka-->
+                                            @using (Html.BeginForm("DeleteFromCart", "Home", new { productID = k.burger.Id }, FormMethod.Post))
+                                            {
+
+                                                <button class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> </button>
+                                            }
+                                        </td>
+                                        <!--Kraj na kopcheto za brishenje na produkt od koshnichka-->
+                                    </tr>
+
+
+                                }
+
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><strong>Вкупно од производи:</strong></td>
+                                    @{ var total = 0;
+                                        var transport = 0;
+                                    }
+                                    @foreach (var k in (List<Koshnichka>)Session["cart"])
+                                    {
+
+                                        total += k.burger.Cena * k.Kolicina;
+                                    }
+
+                                    <td class="text-right"><strong>@total МКД</strong></td>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>Transport</td>
+                                    @if (total >= 500)
+                                    {
+                                        transport = 0;
+                                        <td class="text-right">@transport MKD</td>
+
+                                    }
+                                    else
+                                    {
+                                        transport = 150;
+                                        <td class="text-right">@transport MKD</td>
+
+                                    }
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><strong>За наплата:</strong></td>
+                                    @{vkupno = total + transport;}
+                                    <td class="text-right"><strong>@vkupno МКД</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="col-md-12">
+                            <strong>Дополнителни барања?</strong>
+                        </div>
+                        <div class="col-md-12">
+                            <textarea class="w-100" rows="3" placeholder="На пример: Екстра кечап на бургер број 2!"></textarea>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div style="text-align:center">
+                        <h2>Не си гладен или уште се мислиш?</h2><br /><br />
+                    </div>
+                }
+
+
+
+            </div>
+            <div class="col mb-2">
+                
+                <div class="row">
+                    <div class="col-sm-12 col-md-6 p-1">
+                        <a class="btn btn-block btn-secondary" href="Menu">Продолжи со купување</a>
+                    </div>
+                    <div class="col-sm-12 col-md-6 p-1 text-right">
+                        @if (Session["cart"] != null && ((List<Koshnichka>)Session["cart"]).Count != 0)
+                        {
+                            using (Html.BeginForm("ThankYou", "Home", new { total = vkupno, email = User.Identity.Name }, FormMethod.Post))
+                            {
+                                <button class="btn btn-block btn-warning text-uppercase">Прати нарачка</button>
+                            }
+                        }
+                    </div>
+                </div>
+                <br>
+            </div>
+        </div>
+
+
+        <div class="row bg-warning" style="height: 0.5rem"></div>
+        <!-- Footer -->
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12 p-3 bg-dark text-warning text-center">
+                    <small>Copyright FINKI 2019</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    <!-- C3/D3 Charts -->
+    <script src="vendor/c3/d3.min.js"></script>
+    <script src="vendor/c3/c3.min.js"></script>
+
+    <script src="js/admin.js"></script>
+
+</body>
+</html>

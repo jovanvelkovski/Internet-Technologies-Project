@@ -1,0 +1,270 @@
+﻿@using it_project.Models
+@model IEnumerable<Burger>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <!-- Fonts -->
+    <environment include=”Development”>
+        <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
+        <environment>
+            <!-- C3 css -->
+            <link href="vendor/c3/c3.min.css" rel="stylesheet">
+
+            <title>РОКО</title>
+
+
+            <style>
+                .img-wrapper {
+                    position: relative;
+                }
+
+                .img-responsive {
+                    width: 100%;
+                    height: auto;
+                }
+
+                .img-overlay {
+                    position: absolute;
+                    top: 0;
+                    bottom: 0%;
+                    left: 0;
+                    right: 10%;
+                    text-align: right;
+                }
+
+                    .img-overlay:before {
+                        content: ' ';
+                        display: block;
+                        /* adjust 'height' to position overlay content vertically */
+                        height: 75%;
+                    }
+
+                .text-overlay {
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    left: 0%;
+                    right: 10%;
+                    text-align: right;
+                }
+
+                    .text-overlay:before {
+                        content: ' ';
+                        display: block;
+                        /* adjust 'height' to position overlay content vertically */
+                        height: 20%;
+                    }
+
+                li {
+                    margin-right: 1em;
+                }
+            </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-warning">
+        <div class="container">
+
+            <a class="navbar-brand" href="/Home/Index">
+                <i class="fa fa-hamburger"></i> &nbsp;РОКО
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li>
+                        @Html.ActionLink("Почетна", "Index", "Home")
+                    </li>
+                    <li>
+                        @Html.ActionLink("Мени", "Menu", "Home")
+                    </li>
+
+                    <li margin: 1em 0>
+                        @Html.ActionLink("За нас", "About", "Home")
+                    </li>
+
+                    <li>
+                        @Html.ActionLink("Контакт", "Contact", "Home")
+                    </li>
+                    <li>
+                        @Html.ActionLink("Кетеринг", "Catering", "Home")
+                    </li>
+                    <li>
+                        @Html.ActionLink("Кошничка", "Cart", "Home")
+                    </li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item">
+                            @Html.ActionLink("Измени мени", "Index", "Admin")
+                        </li>
+                    }
+
+
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li>
+                            Здраво, @User.Identity.Name.Substring(0, User.Identity.Name.IndexOf("@"))!
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            @Html.ActionLink("Најави се / Зачлени се", "LogIn", "Account")
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Custom Burger floating button -->
+    <a href="/Home/CustomBurger">
+        <div id='custom-burger-popover' style="position: fixed; bottom: 100px; right: 40px; z-index: 100;" data-toggle="popover" data-placement="top" data-container="Create a custom burger!">
+            <img src="~/Img/burger2.jpg" class="img-thumbnail bg-warning" height="100px" width="100px" style="opacity: 0.5">
+            <div class="text-warning" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                <i class="fa fa-wrench fa-3x"></i>
+            </div>
+        </div>
+    </a>
+
+    <!-- Content -->
+    <div class="container-fluid p-0 bg-dark">
+        <!-- jumbotron like thing with burger cover image -->
+        <div class="img-wrapper">
+            <img src="@Href("~/Img/cover.jpg")" class="img-fluid" style="width: 100%; transform: scaleX(-1);">
+            <div class="img-overlay">
+                <a href="/Home/Menu" class="btn btn-lg btn-warning">Погледни мени!</a>
+            </div>
+            <!--
+            <div class="text-overlay text-light">
+                <h3>Best burgers</h3>
+                <h3>in town!</h3>
+            </div>
+            -->
+        </div>
+
+        <div class="col-12">
+            <div class="row bg-dark" style="height: 0.5rem;"></div>
+            <div class="row bg-warning text-dark justify-content-center" style="height: 5rem;">
+                <h2 class="my-auto">Погледнете ги нашите најбарани производи!</h2>
+            </div>
+            <div class="row bg-dark" style="height: 0.5rem;"></div>
+        </div>
+
+        <!-- Items carousel -->
+        <div class="container">
+            <div class="row w-80 p-xl-5 p-lg-5 p-md-2 p-sm-2 align-content-center">
+                @{ var i = 0;}
+                @foreach (Burger b in Model)
+                {
+                    i += 2;
+                    if(i > Model.Count())
+                    {
+                        break;
+                    }
+                    <div class="col-4 mb-4" style="min-width: 16rem;">
+                        <div class="card bg-warning">
+                            <a href="#burger@(i)modal" class="text-dark" data-toggle="modal" data-target="#burger@(i)modal">
+                                <img src="@Href(b.Pateka)" class="card-img-top" alt="...">
+                                <div class="card-body">
+                                    <h5 class="card-title">@b.Ime</h5>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                }
+
+
+            </div>
+        </div>
+
+        <div class="col-8 mx-auto">
+            <div class="row bg-warning" style="height: 0.5rem"></div>
+        </div>
+
+        <!-- Footer -->
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12 p-3 bg-dark text-warning text-center">
+                    <small>Copyright FINKI 2019</small>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Modals !!! HIDDEN BY DEFAULT !!! -->
+    @{ i = 0;}
+    @foreach (Burger b in Model)
+    {
+        i+=2;
+        
+        <div class="modal fade" id="burger@(i)modal" tabindex="-1" role="dialog" aria-labelledby="burger@(i)ModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content bg-dark text-warning">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="burger@(i)ModalTitle">@b.Ime</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-6">
+                                    <img class="img-fluid img-thumbnail" style="background-color: #ffbb33; border: none;" src="@Href(b.Pateka)">
+                                </div>
+                                <div class="col-6">
+                                    <div class="col-12">
+                                        <ul>
+                                            <li>
+                                                @b.Opis
+                                            </li>
+                                            <li>
+                                                Цена: @b.Cena МКД
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary btn-dark" data-dismiss="modal">Затвори</button>
+                        @using (Html.BeginForm("AddToCart", "Home", new { productID = b.Id }, FormMethod.Post))
+                        {
+                            <button class="btn btn-dark text-warning mx-1"><i class="fa fa-cart-plus"></i> Додади во кошничка</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- / Modals -->
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    <!-- C3/D3 Charts -->
+    <script src="vendor/c3/d3.min.js"></script>
+    <script src="vendor/c3/c3.min.js"></script>
+
+    <script src="js/admin.js"></script>
+
+</body>
+</html>

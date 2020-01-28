@@ -1,0 +1,254 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- johann stepper -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bs-stepper/dist/css/bs-stepper.min.css">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <!-- Fonts -->
+    <link href="fontawesome/css/all.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
+
+    <!-- C3 css -->
+    <link href="vendor/c3/c3.min.css" rel="stylesheet">
+
+    <title>Сам свој мајстор!</title>
+    <style>
+        li {
+            margin-right: 1em;
+        }
+    </style>
+
+</head>
+
+<body class="bg-dark">
+
+    <!-- Navigation -->
+    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-warning">
+        <div class="container">
+
+            <a class="navbar-brand" href="Index">
+                <i class="fa fa-hamburger"></i> &nbsp;РОКО
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        @Html.ActionLink("Почетна", "Index", "Home")
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Мени", "Menu", "Home")
+                    </li>
+
+                    <li class="nav-item">
+                        @Html.ActionLink("За нас", "About", "Home")
+                    </li>
+
+                    <li class="nav-item">
+                        @Html.ActionLink("Контакт", "Contact", "Home")
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Кетеринг", "Catering", "Home")
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Кошничка", "Cart", "Home")
+                    </li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item">
+                            @Html.ActionLink("Измени мени", "Index", "Admin")
+                        </li>
+                    }
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li>
+                            Здраво, @User.Identity.Name.Substring(0, User.Identity.Name.IndexOf("@"))!
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            @Html.ActionLink("Sign in / Sign up", "LogIn", "Account")
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="container p-0 bg-dark text-warning">
+        <div class="col-12">
+            <div  class="row px-5 pt-2 pb-2"><h2 class="font-weight-bold">САМ СВОЈ МАЈСТОР!</h2></div>
+            <div class="row px-5 pt-2 pb-2"><h4 class="font-weight-bold">Одберете ги вашите омилени намирници!</h4><br /><br /><br /></div>
+
+            <!-- Custom Burger Selection Menu -->
+           
+            
+                <fieldset class="form-group">
+                    <div class="row">
+                        <legend class="col-form-label col-sm-2 pt-0 font-weight-bold">Лепче</legend>
+                        <div class="col-sm-10">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="breadTypes" id="breadTypes1" value="бело лепче" checked>
+                                <label class="form-check-label" for="breadTypes1">бело лепче</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="breadTypes" id="breadTypes2" value="црно лепче">
+                                <label class="form-check-label" for="breadTypes2">црно лепче</label>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset class="form-group">
+                    <div class="row">
+                        <legend class="col-form-label col-sm-2 pt-0 font-weight-bold">Месо</legend>
+                        <div class="col-sm-10">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="meatTypes" id="meatTypes1" value="плескавица" checked>
+                                <label class="form-check-label" for="breadTypes1">плескавица</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="meatTypes" id="meatTypes2" value="пилешко">
+                                <label class="form-check-label" for="meatTypes2">пилешко</label>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="form-group row">
+                    <div class="col-sm-2 font-weight-bold">Зеленчук</div>
+                    <div class="col-sm-10">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="greensTypes" id="greens1" checked>
+                            <label class="form-check-label" for="greens1">марула</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="greensTypes" id="greens2" checked>
+                            <label class="form-check-label" for="greens2">домат</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="greensTypes" id="greens3">
+                            <label class="form-check-label" for="greens3">кромид</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-2 font-weight-bold">Сосови</div>
+                    <div class="col-sm-10">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="condimentsTypes" id="condiments1" checked>
+                            <label class="form-check-label" for="condiments1">кари</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="condimentsTypes" id="condiments2" checked>
+                            <label class="form-check-label" for="condiments2">авокадо</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="condimentsTypes" id="condiments3">
+                            <label class="form-check-label" for="condiments3">чили</label>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="form-group row">
+                    <div class="col-sm-10">
+                        @using (Html.BeginForm("AddToCartCustom", "Home", new { opis = "Сам свој мајстор!" }, FormMethod.Post))
+                        {
+                            <button class="btn btn-outline-warning">Додади во кошничка!</button>
+                        }
+                    </div>
+                </div>
+            
+
+            <!-- Stepper -->
+            <!--
+            <div class="bs-stepper vertical">
+                <div class="bs-stepper-header" role="tablist">
+                    <div class="step" data-target="#breadType">
+                        <button type="button" class="step-trigger" role="tab" aria-controls="breadType" id="breadType-trigger">
+                            <span class="bs-stepper-circle">1</span>
+                            <span class="bs-stepper-label">Bread</span>
+                        </button>
+                    </div>
+                    <div class="line"></div>
+                    <div class="step" data-target="#meatType">
+                        <button type="button" class="step-trigger" role="tab" aria-controls="meatType" id="meatType-trigger">
+                            <span class="bs-stepper-circle">2</span>
+                            <span class="bs-stepper-label">Meat</span>
+                        </button>
+                    </div>
+                    <div class="line"></div>
+                    <div class="step" data-target="#greens">
+                        <button type="button" class="step-trigger" role="tab" aria-controls="greens" id="greens-trigger">
+                            <span class="bs-stepper-circle">3</span>
+                            <span class="bs-stepper-label">Greens</span>
+                        </button>
+                    </div>
+                    <div class="line"></div>
+                    <div class="step" data-target="#condiments">
+                        <button type="button" class="step-trigger" role="tab" aria-controls="condiments" id="condiments-trigger">
+                            <span class="bs-stepper-circle">4</span>
+                            <span class="bs-stepper-label">Condiments</span>
+                        </button>
+                    </div>
+                    <div class="line"></div>
+                    <div class="step" data-target="#notes">
+                        <button type="button" class="step-trigger" role="tab" aria-controls="notes" id="notes-trigger">
+                            <span class="bs-stepper-circle">5</span>
+                            <span class="bs-stepper-label">Notes</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="bs-stepper-content">
+                    <div id="breadType" class="content" role="tabpanel" aria-labelledby="logins-part-trigger"></div>
+                    <div id="meatType" class="content" role="tabpanel" aria-labelledby="information-part-trigger"></div>
+                    <div id="greens" class="content" role="tabpanel" aria-labelledby="information-part-trigger"></div>
+                    <div id="condiments" class="content" role="tabpanel" aria-labelledby="information-part-trigger"></div>
+                    <div id="notes" class="content" role="tabpanel" aria-labelledby="information-part-trigger"></div>
+                </div>
+            </div>
+
+            -->
+
+            <div class="row bg-warning" style="height: 0.5rem"></div>
+        </div>
+
+
+
+        <!-- Footer -->
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12 p-3 bg-dark text-warning text-center">
+                    <small>Copyright FINKI 2019</small>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bs-stepper/dist/js/bs-stepper.min.js" type="text/javascript"></script>
+
+    <!-- C3/D3 Charts -->
+    <script src="vendor/c3/d3.min.js"></script>
+    <script src="vendor/c3/c3.min.js"></script>
+
+    <script src="js/admin.js"></script>
+
+</body>
+</html>
